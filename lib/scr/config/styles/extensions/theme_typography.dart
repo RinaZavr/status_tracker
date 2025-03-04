@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:status_tracker/scr/config/styles/colors.dart';
 import 'package:status_tracker/scr/config/styles/typography.dart';
 
 @immutable
@@ -9,7 +10,7 @@ class ThemeTypography extends ThemeExtension<ThemeTypography> {
     required this.normal,
   });
 
-  ThemeTypography.light([Color color = Colors.black])
+  ThemeTypography.light([Color color = AppColors.raisinblacksecond])
       : title = AppTypography.nunitoBold24.copyWith(
           color: color,
         ),
@@ -20,7 +21,7 @@ class ThemeTypography extends ThemeExtension<ThemeTypography> {
           color: color,
         );
 
-  ThemeTypography.dark([Color color = Colors.white])
+  ThemeTypography.dark([Color color = AppColors.gainsboro])
       : title = AppTypography.nunitoBold24.copyWith(
           color: color,
         ),

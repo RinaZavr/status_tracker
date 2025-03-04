@@ -14,12 +14,12 @@ abstract class AppTypography {
   static const nunitoBold15 = TextStyle(
     fontFamily: fontFamily,
     fontWeight: FontWeight.w600,
-    fontSize: 15,
+    fontSize: 20,
   );
 
   static const nunitoRegular13 = TextStyle(
     fontFamily: fontFamily,
     fontWeight: FontWeight.w400,
-    fontSize: 13,
+    fontSize: 18,
   );
 }

@@ -18,7 +18,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
     required this.otherColor,
   });
 
-  const ThemeColors.light()
+  const ThemeColors.dark()
       : textColor = AppColors.gainsboro,
         secondaryTextColor = AppColors.dimgray,
         backgroundColor = AppColors.raisinblack,
@@ -32,7 +32,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
         studyColor = AppColors.royalpurple,
         otherColor = AppColors.polishedpine;
 
-  const ThemeColors.dark()
+  const ThemeColors.light()
       : textColor = AppColors.raisinblacksecond,
         secondaryTextColor = AppColors.gray,
         backgroundColor = AppColors.white,

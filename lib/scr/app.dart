@@ -1,8 +1,11 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/config/router/router.dart';
 import 'package:status_tracker/scr/config/styles/themes.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -40,11 +43,41 @@ class _AppState extends State<App> {
       ),
     );
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: AppThemes.light,
-      darkTheme: AppThemes.dark,
-      routerConfig: _router,
+    return ThemeProvider(
+      saveThemesOnChange: true,
+      loadThemeOnInit: true,
+      themes: [
+        AppTheme(
+          id: 'light',
+          data: AppThemes.light,
+          description: 'light',
+        ),
+        AppTheme(
+          id: 'dark',
+          data: AppThemes.dark,
+          description: 'dark',
+        ),
+      ],
+      child: ThemeConsumer(
+        child: Builder(
+          builder: (context) {
+            return CalendarControllerProvider(
+              controller: EventController(),
+              child: MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                theme: ThemeProvider.controllerOf(context).theme.data,
+                supportedLocales: const [Locale('ru')],
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                routerConfig: _router,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

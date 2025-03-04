@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-abstract class AppAssets {
+abstract class AppIcons {
   static const IconData lightThemeIcon = CupertinoIcons.brightness;
   static const IconData darkThemeIcon = CupertinoIcons.moon;
   static const IconData recordsIcon = CupertinoIcons.collections;
