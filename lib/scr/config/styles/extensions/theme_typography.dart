@@ -1,22 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:status_tracker/scr/config/styles/typography.dart';
 
 @immutable
 class ThemeTypography extends ThemeExtension<ThemeTypography> {
   const ThemeTypography._({
     required this.title,
+    required this.titleMiddle,
+    required this.normal,
   });
 
   ThemeTypography.light([Color color = Colors.black])
-      : title = const TextStyle().copyWith(
+      : title = AppTypography.nunitoBold24.copyWith(
+          color: color,
+        ),
+        titleMiddle = AppTypography.nunitoBold15.copyWith(
+          color: color,
+        ),
+        normal = AppTypography.nunitoRegular13.copyWith(
           color: color,
         );
 
   ThemeTypography.dark([Color color = Colors.white])
-      : title = const TextStyle().copyWith(
+      : title = AppTypography.nunitoBold24.copyWith(
+          color: color,
+        ),
+        titleMiddle = AppTypography.nunitoBold15.copyWith(
+          color: color,
+        ),
+        normal = AppTypography.nunitoRegular13.copyWith(
           color: color,
         );
 
   final TextStyle title;
+  final TextStyle titleMiddle;
+  final TextStyle normal;
 
   @override
   ThemeExtension<ThemeTypography> lerp(
@@ -33,6 +50,16 @@ class ThemeTypography extends ThemeExtension<ThemeTypography> {
         other.title,
         t,
       )!,
+      titleMiddle: TextStyle.lerp(
+        titleMiddle,
+        other.titleMiddle,
+        t,
+      )!,
+      normal: TextStyle.lerp(
+        normal,
+        other.normal,
+        t,
+      )!,
     );
   }
 
@@ -43,9 +70,13 @@ class ThemeTypography extends ThemeExtension<ThemeTypography> {
   @override
   ThemeExtension<ThemeTypography> copyWith({
     TextStyle? title,
+    TextStyle? titleMiddle,
+    TextStyle? normal,
   }) {
     return ThemeTypography._(
       title: title ?? this.title,
+      titleMiddle: titleMiddle ?? this.titleMiddle,
+      normal: normal ?? this.normal,
     );
   }
 }
