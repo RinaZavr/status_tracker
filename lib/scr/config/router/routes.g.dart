@@ -9,8 +9,6 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [
       $authRoute,
       $calendarRoute,
-      $createRecordRoute,
-      $myRecordsRoute,
     ];
 
 RouteBase get $authRoute => GoRouteData.$route(
@@ -45,51 +43,6 @@ extension $CalendarRouteExtension on CalendarRoute {
 
   String get location => GoRouteData.$location(
         '/calendar',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $createRecordRoute => GoRouteData.$route(
-      path: '/create-record',
-      factory: $CreateRecordRouteExtension._fromState,
-    );
-
-extension $CreateRecordRouteExtension on CreateRecordRoute {
-  static CreateRecordRoute _fromState(GoRouterState state) =>
-      CreateRecordRoute();
-
-  String get location => GoRouteData.$location(
-        '/create-record',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $myRecordsRoute => GoRouteData.$route(
-      path: '/my-records',
-      factory: $MyRecordsRouteExtension._fromState,
-    );
-
-extension $MyRecordsRouteExtension on MyRecordsRoute {
-  static MyRecordsRoute _fromState(GoRouterState state) => MyRecordsRoute();
-
-  String get location => GoRouteData.$location(
-        '/my-records',
       );
 
   void go(BuildContext context) => context.go(location);

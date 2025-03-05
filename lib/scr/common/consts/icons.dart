@@ -6,11 +6,12 @@ abstract class AppIcons {
   static const IconData darkThemeIcon = CupertinoIcons.moon;
   static const IconData recordsIcon = CupertinoIcons.collections;
   static const IconData filterIcon = CupertinoIcons.calendar;
-  static const IconData sortIcon = CupertinoIcons.sort_down;
+  static const IconData sortDownIcon = CupertinoIcons.sort_down;
+  static const IconData sortUpIcon = CupertinoIcons.sort_up;
   static const IconData editIcon = CupertinoIcons.pencil;
   static const IconData closeIcon = CupertinoIcons.clear;
   static const IconData remoteIcon = CupertinoIcons.home;
-  static const IconData diseaseIcon = Icons.medication;
+  static const IconData sickIcon = Icons.medication_outlined;
   static const IconData vacationIcon = CupertinoIcons.globe;
   static const IconData studyIcon = Icons.school;
   static const IconData otherIcon = CupertinoIcons.car_detailed;

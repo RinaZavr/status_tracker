@@ -12,7 +12,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
     required this.lightBorderColor,
     required this.darkBorderColor,
     required this.remoteColor,
-    required this.diseaseColor,
+    required this.sickColor,
     required this.vacationColor,
     required this.studyColor,
     required this.otherColor,
@@ -27,7 +27,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
         lightBorderColor = AppColors.arsenic,
         darkBorderColor = AppColors.bleudefrance,
         remoteColor = AppColors.celestialblue,
-        diseaseColor = AppColors.popstar,
+        sickColor = AppColors.popstar,
         vacationColor = AppColors.ruddybrown,
         studyColor = AppColors.royalpurple,
         otherColor = AppColors.polishedpine;
@@ -41,7 +41,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
         lightBorderColor = AppColors.platinum,
         darkBorderColor = AppColors.pictonblue,
         remoteColor = AppColors.celestialblue,
-        diseaseColor = AppColors.popstar,
+        sickColor = AppColors.popstar,
         vacationColor = AppColors.ruddybrown,
         studyColor = AppColors.royalpurple,
         otherColor = AppColors.polishedpine;
@@ -54,7 +54,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
   final Color lightBorderColor;
   final Color darkBorderColor;
   final Color remoteColor;
-  final Color diseaseColor;
+  final Color sickColor;
   final Color vacationColor;
   final Color studyColor;
   final Color otherColor;
@@ -83,7 +83,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
       lightBorderColor: lightBorderColor ?? this.lightBorderColor,
       darkBorderColor: darkBorderColor ?? this.darkBorderColor,
       remoteColor: remoteColor ?? this.remoteColor,
-      diseaseColor: diseaseColor ?? this.diseaseColor,
+      sickColor: diseaseColor ?? sickColor,
       vacationColor: vacationColor ?? this.vacationColor,
       studyColor: studyColor ?? this.studyColor,
       otherColor: otherColor ?? this.otherColor,
@@ -140,9 +140,9 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
         other.remoteColor,
         t,
       )!,
-      diseaseColor: Color.lerp(
-        diseaseColor,
-        other.diseaseColor,
+      sickColor: Color.lerp(
+        sickColor,
+        other.sickColor,
         t,
       )!,
       vacationColor: Color.lerp(
