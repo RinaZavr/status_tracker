@@ -20,14 +20,21 @@ class HeaderCalendarWidget extends StatefulWidget {
 
 class _HeaderCalendarWidgetState extends State<HeaderCalendarWidget> {
   String headerText = '';
-  DateTime currentDate = DateTime.now();
 
   @override
   void initState() {
     headerText = _getHeader(
-      date: currentDate,
+      date: DateTime.now(),
     );
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant HeaderCalendarWidget oldWidget) {
+    if (widget.date != oldWidget.date) {
+      headerText = _getHeader(date: widget.date);
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -39,11 +46,6 @@ class _HeaderCalendarWidgetState extends State<HeaderCalendarWidget> {
           icon: AppIcons.monthBackIcon,
           onPressed: () {
             widget.state.currentState?.previousPage();
-            currentDate = addMonth(currentDate);
-            headerText = _getHeader(
-              date: currentDate,
-            );
-            setState(() {});
           },
         ),
         Expanded(
@@ -56,21 +58,16 @@ class _HeaderCalendarWidgetState extends State<HeaderCalendarWidget> {
         ),
         CalendarButton(
           icon: AppIcons.monthReturnIcon,
-          onPressed: widget.state.currentState?.currentDate.month ==
-                  DateTime.now().month
+          onPressed: widget.date.month == DateTime.now().month
               ? null
               : () {
-                  widget.state.currentState?.jumpToMonth(DateTime.now());
+                  widget.state.currentState?.animateToMonth(DateTime.now());
                 },
         ),
         CalendarButton(
           icon: AppIcons.monthForwardIcon,
           onPressed: () {
             widget.state.currentState?.nextPage();
-            currentDate = subtractMonth(currentDate);
-            headerText = _getHeader(
-              date: currentDate,
-            );
           },
         ),
       ],

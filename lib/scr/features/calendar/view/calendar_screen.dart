@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
-import 'package:status_tracker/scr/config/router/routes.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/calendar_widget.dart';
+import 'package:status_tracker/scr/features/records/my/view/my_records_screen.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -24,13 +22,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
           'Календарь',
           style: context.textExt.titleMiddle,
         ),
+        automaticallyImplyLeading: false,
         actions: [
           CustomButton(
             child: const Icon(AppIcons.darkThemeIcon),
             onPressed: () {
-              log(
-                ThemeProvider.controllerOf(context).currentThemeId,
-              );
               ThemeProvider.controllerOf(context).currentThemeId == 'dark'
                   ? ThemeProvider.controllerOf(context).setTheme('light')
                   : ThemeProvider.controllerOf(context).setTheme('dark');
@@ -40,7 +36,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
           CustomButton(
             child: const Icon(AppIcons.recordsIcon),
             onPressed: () {
-              MyRecordsRoute().push(context);
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return const MyRecordsScreen();
+                },
+              );
+              // MyRecordsRoute().push(context);
             },
           ),
           const SizedBox(width: 10),
@@ -53,14 +55,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
         ],
       ),
-      floatingActionButton: CustomButton(
-        onPressed: () {
-          CreateRecordRoute().push(context);
-        },
-        backgroundColor: context.colorExt.buttonColor,
-        child: const Icon(AppIcons.addIcon),
+      body: Stack(
+        children: [
+          const CalendarWidget(),
+          Positioned(
+            bottom: 30,
+            right: 30,
+            child: CustomButton(
+              onPressed: () {
+                // CreateRecordRoute().push(context);
+              },
+              backgroundColor: context.colorExt.buttonColor,
+              child: const Icon(AppIcons.addIcon),
+            ),
+          ),
+        ],
       ),
-      body: const CalendarWidget(),
     );
   }
 }

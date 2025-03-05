@@ -2,9 +2,11 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/config/router/router.dart';
 import 'package:status_tracker/scr/config/styles/themes.dart';
+import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class App extends StatefulWidget {
@@ -61,8 +63,8 @@ class _AppState extends State<App> {
       child: ThemeConsumer(
         child: Builder(
           builder: (context) {
-            return CalendarControllerProvider(
-              controller: EventController(),
+            return CalendarControllerProvider<Incident>(
+              controller: EventController<Incident>(),
               child: MaterialApp.router(
                 debugShowCheckedModeBanner: false,
                 theme: ThemeProvider.controllerOf(context).theme.data,
