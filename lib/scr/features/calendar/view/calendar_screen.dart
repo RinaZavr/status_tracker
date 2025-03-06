@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
+import 'package:status_tracker/scr/features/auth/view/auth_screen.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/calendar_widget.dart';
+import 'package:status_tracker/scr/features/records/create/view/create_record_screen.dart';
 import 'package:status_tracker/scr/features/records/my/view/my_records_screen.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -14,6 +16,8 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
+  String? name = 'Имя Фамилия';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,42 +37,108 @@ class _CalendarScreenState extends State<CalendarScreen> {
             },
           ),
           const SizedBox(width: 10),
-          CustomButton(
-            child: const Icon(AppIcons.recordsIcon),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return const MyRecordsScreen();
-                },
-              );
-              // MyRecordsRoute().push(context);
-            },
-          ),
-          const SizedBox(width: 10),
-          IconButton(
-            icon: Text(
-              'Имя Фамилия',
-              style: context.textExt.normal,
+          if (name != null)
+            CustomButton(
+              child: const Icon(AppIcons.recordsIcon),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const MyRecordsScreen();
+                  },
+                );
+              },
             ),
-            onPressed: () {},
+          if (name != null) const SizedBox(width: 10),
+          PopupMenuButton<String>(
+            position: PopupMenuPosition.under,
+            color: context.colorExt.backgroundColor,
+            onSelected: (value) {
+              setState(() {
+                name = null;
+              });
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'logout',
+                child: Center(
+                  child: Text(
+                    'Выйти',
+                    style: context.textExt.normal.copyWith(color: Colors.red),
+                  ),
+                ),
+              ),
+            ],
+            child: name != null
+                ? Text(
+                    name!,
+                    style: context.textExt.normal,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                : CustomButton(
+                    child: Text('Войти', style: context.textExt.normal),
+                    onPressed: () async {
+                      name = await showDialog<String>(
+                        context: context,
+                        builder: (context) {
+                          return const AuthScreen();
+                        },
+                      );
+                      setState(() {});
+                    },
+                  ),
           ),
+          const SizedBox(width: 16),
+
+          // IconButton(
+          //   icon: Text(
+          //     name,
+          //     style: context.textExt.normal,
+          //   ),
+          //   onPressed: () {
+          //     PopupMenuButton<String>(
+          //       position: PopupMenuPosition.under,
+          //       onSelected: (value) {
+          //         setState(() {
+          //           name = value;
+          //         });
+          //       },
+          //       itemBuilder: (context) => const [
+          //         PopupMenuItem(
+          //           value: 'Имя Фамилия',
+          //           child: Text('Имя Фамилия'),
+          //         ),
+          //         PopupMenuItem(
+          //           value: 'Имя Фамилия2',
+          //           child: Text('Имя Фамилия2'),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // ),
         ],
       ),
       body: Stack(
         children: [
           const CalendarWidget(),
-          Positioned(
-            bottom: 30,
-            right: 30,
-            child: CustomButton(
-              onPressed: () {
-                // CreateRecordRoute().push(context);
-              },
-              backgroundColor: context.colorExt.buttonColor,
-              child: const Icon(AppIcons.addIcon),
+          if (name != null)
+            Positioned(
+              bottom: 30,
+              right: 30,
+              child: CustomButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const CreateRecordScreen();
+                    },
+                  );
+                },
+                backgroundColor: context.colorExt.buttonColor,
+                child: const Icon(AppIcons.addIcon),
+              ),
             ),
-          ),
         ],
       ),
     );
