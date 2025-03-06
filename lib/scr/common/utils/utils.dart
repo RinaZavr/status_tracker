@@ -1,5 +1,6 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
@@ -129,7 +130,17 @@ abstract class Utils {
       return TimeFilter.year;
     }
 
-    // Если период не совпадает ни с одним из фильтров, возвращаем "Произвольный период"
+    // Если период не совпадает ни с одним из фильтров,
+    // возвращаем "Произвольный период"
     return TimeFilter.period;
+  }
+
+  static String getBasicDateFormat({String? date, DateTime? dateTime}) {
+    if (date != null) {
+      return DateFormat('dd.MM.yyyy').format(DateTime.parse(date));
+    } else if (dateTime != null) {
+      return DateFormat('dd.MM.yyyy').format(dateTime);
+    }
+    return '';
   }
 }

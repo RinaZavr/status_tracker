@@ -1,10 +1,12 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
+import 'package:status_tracker/scr/common/utils/utils.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
+import 'package:status_tracker/scr/features/records/create/view/create_record_screen.dart';
 import 'package:status_tracker/scr/features/records/my/view/widgets/incident_status_widget.dart';
 import 'package:status_tracker/scr/features/records/my/view/widgets/time_filter_widget.dart';
 
@@ -19,8 +21,55 @@ class _MyRecordsScreenState extends State<MyRecordsScreen> {
   TimeFilter _selectedValue = TimeFilter.month;
   DateTimeRange? _selectedRange;
   final List<IncidentStatus> _selectedStatuses = List.of(IncidentStatus.values);
+  List<CalendarEventData<Incident>> events = [];
 
   bool sortDown = true;
+
+  @override
+  void initState() {
+    final incidentNotPeriod = Incident(
+      id: 0,
+      userId: 0,
+      name: 'test',
+      surname: 'test',
+      status: IncidentStatus.remote,
+      isPeriod: false,
+      date: DateTime.now().withoutTime.toString(),
+    );
+    final eventNotPeriod = CalendarEventData<Incident>(
+      title: incidentNotPeriod.name + incidentNotPeriod.surname,
+      date: DateTime.parse(
+        incidentNotPeriod.date ?? incidentNotPeriod.startDate!,
+      ),
+      endDate: incidentNotPeriod.endDate == null
+          ? null
+          : DateTime.parse(incidentNotPeriod.endDate!),
+      event: incidentNotPeriod,
+    );
+
+    final incidentPeriod = Incident(
+      id: 1,
+      userId: 1,
+      name: 'test',
+      surname: 'test',
+      status: IncidentStatus.sick,
+      isPeriod: true,
+      startDate: DateTime.now().withoutTime.toString(),
+      endDate: DateTime(2025, 3, 10).withoutTime.toString(),
+    );
+    final eventPeriod = CalendarEventData<Incident>(
+      title: incidentPeriod.name + incidentPeriod.surname,
+      date: DateTime.parse(incidentPeriod.date ?? incidentPeriod.startDate!),
+      endDate: incidentPeriod.endDate == null
+          ? null
+          : DateTime.parse(incidentPeriod.endDate!),
+      event: incidentPeriod,
+    );
+
+    events = [eventNotPeriod, eventPeriod];
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +118,8 @@ class _MyRecordsScreenState extends State<MyRecordsScreen> {
                   if (_selectedRange != null &&
                       _selectedValue != TimeFilter.all)
                     Text(
-                      '${DateFormat('dd.MM.yyyy').format(_selectedRange!.start)} '
-                      '- ${DateFormat('dd.MM.yyyy').format(_selectedRange!.end)}',
+                      '${Utils.getBasicDateFormat(dateTime: _selectedRange!.start)} '
+                      '- ${Utils.getBasicDateFormat(dateTime: _selectedRange!.end)}',
                       style: context.textExt.titleMiddle,
                     ),
                   CustomButton(
@@ -112,6 +161,104 @@ class _MyRecordsScreenState extends State<MyRecordsScreen> {
                     return const SizedBox(width: 8);
                   },
                   itemCount: IncidentStatus.values.length,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 8);
+                  },
+                  itemBuilder: (context, index) {
+                    final event = events[index].event!;
+                    final statusUi = Utils.getStatusUi(context, event.status);
+                    var text = '';
+                    var range = <DateTime>[];
+                    if (event.date != null) {
+                      text = Utils.getBasicDateFormat(date: event.date);
+                      range = [
+                        DateTime.parse(event.date!),
+                        DateTime.parse(event.date!),
+                      ];
+                    } else if (event.startDate != null &&
+                        event.endDate != null) {
+                      text =
+                          '${Utils.getBasicDateFormat(date: event.startDate)} '
+                          '- ${Utils.getBasicDateFormat(date: event.endDate)}';
+                      range = [
+                        DateTime.parse(event.startDate!),
+                        DateTime.parse(event.endDate!),
+                      ];
+                    }
+
+                    return Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: context.colorExt.lightBorderColor,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: statusUi['color'],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 8,
+                              children: [
+                                Icon(
+                                  statusUi['icon'],
+                                  size: 20,
+                                ),
+                                Text(
+                                  text,
+                                  style: context.textExt.normal,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CreateRecordScreen(
+                                    dates: range,
+                                    status: event.status,
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              AppIcons.editIcon,
+                              color: context.colorExt.textColor,
+                              size: 20,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                events.remove(events[index]);
+                              });
+                            },
+                            icon: Icon(
+                              AppIcons.closeIcon,
+                              color: context.colorExt.textColor,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  itemCount: events.length,
                 ),
               ),
             ],

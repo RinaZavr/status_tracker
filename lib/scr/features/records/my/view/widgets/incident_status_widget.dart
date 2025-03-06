@@ -7,11 +7,13 @@ class IncidentStatusWidget extends StatelessWidget {
   const IncidentStatusWidget({
     super.key,
     required this.status,
+    this.text,
     required this.isSelected,
     required this.onTap,
   });
 
   final IncidentStatus status;
+  final String? text;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -40,7 +42,7 @@ class IncidentStatusWidget extends StatelessWidget {
               size: 20,
             ),
             Text(
-              status.name,
+              text ?? status.name,
               style: context.textExt.normal,
             ),
           ],

@@ -1,4 +1,3 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +5,7 @@ import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/utils/utils.dart';
 import 'package:status_tracker/scr/features/records/my/view/my_records_screen.dart';
+import 'package:status_tracker/scr/features/records/my/view/widgets/date_picker_widget.dart';
 
 class TimeFilterWidget extends StatefulWidget {
   const TimeFilterWidget({
@@ -48,54 +48,18 @@ class _TimeFilterWidgetState extends State<TimeFilterWidget> {
               child: item == TimeFilter.period
                   ? SizedBox(
                       width: 350,
-                      child: CalendarDatePicker2(
-                        config: CalendarDatePicker2Config(
-                          calendarType: CalendarDatePicker2Type.range,
-                          weekdayLabels: [
-                            'Вс',
-                            'Пн',
-                            'Вт',
-                            'Ср',
-                            'Чт',
-                            'Пт',
-                            'Сб',
-                          ],
-                          firstDayOfWeek: 1,
-                          selectedDayHighlightColor:
-                              context.colorExt.buttonColor,
-                          selectedRangeHighlightColor:
-                              context.colorExt.buttonColor,
-                          dayTextStyle: context.textExt.normal,
-                          yearTextStyle: context.textExt.normal,
-                          monthTextStyle: context.textExt.normal,
-                          selectedDayTextStyle: context.textExt.normal,
-                          selectedRangeDayTextStyle: context.textExt.normal,
-                          weekdayLabelTextStyle: context.textExt.normal,
-                        ),
-                        value: widget.selectedRange != null
-                            ? [
-                                widget.selectedRange!.start,
-                                widget.selectedRange!.end,
-                              ]
-                            : [],
-                        onValueChanged: (value) {
-                          if (value.length > 1) {
-                            final possibleFilter = Utils.getFilterFromRange(
-                              DateTimeRange(
-                                start: value.first.withoutTime,
-                                end: value.last.withoutTime,
-                              ),
-                            );
-                            widget.onChangedFilter(possibleFilter);
-
-                            widget.onChangedRange(
-                              DateTimeRange(
-                                start: value.first,
-                                end: value.last,
-                              ),
-                            );
-                            context.pop();
-                          }
+                      child: DatePickerWidget(
+                        selectedRange: widget.selectedRange,
+                        onChangedRange: (range) {
+                          final possibleFilter = Utils.getFilterFromRange(
+                            DateTimeRange(
+                              start: range.start.withoutTime,
+                              end: range.end.withoutTime,
+                            ),
+                          );
+                          widget.onChangedFilter(possibleFilter);
+                          widget.onChangedRange(range);
+                          context.pop();
                         },
                       ),
                     )
