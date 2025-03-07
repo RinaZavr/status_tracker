@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
+import 'package:status_tracker/scr/config/styles/colors.dart';
 import 'package:status_tracker/scr/features/auth/view/widgets/custom_text_field.dart';
 
 class RegisterFormWidget extends StatefulWidget {
@@ -148,6 +149,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
               Tooltip(
                 message:
                     'Ключ можно получить у разработчика', // Текст подсказки
+                triggerMode: TooltipTriggerMode.tap,
                 child: Icon(
                   CupertinoIcons.info_circle,
                   color: context.colorExt.textColor,
@@ -167,7 +169,11 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                 }
               },
               backgroundColor: context.colorExt.buttonColor,
-              child: Text('Зарегистрироваться', style: context.textExt.normal),
+              child: Text(
+                'Зарегистрироваться',
+                style: context.textExt.normal
+                    .copyWith(color: AppColors.raisinblacksecond),
+              ),
             ),
           ),
         ],

@@ -10,25 +10,29 @@ class ThemeTypography extends ThemeExtension<ThemeTypography> {
     required this.normal,
   });
 
-  ThemeTypography.light([Color color = AppColors.raisinblacksecond])
-      : title = AppTypography.nunitoBold24.copyWith(
+  ThemeTypography.light(
+    BuildContext context, [
+    Color color = AppColors.raisinblacksecond,
+  ])  : title = AppTypography.nunitoBold20(context).copyWith(
           color: color,
         ),
-        titleMiddle = AppTypography.nunitoBold15.copyWith(
+        titleMiddle = AppTypography.nunitoBold18(context).copyWith(
           color: color,
         ),
-        normal = AppTypography.nunitoRegular13.copyWith(
+        normal = AppTypography.nunitoRegular15(context).copyWith(
           color: color,
         );
 
-  ThemeTypography.dark([Color color = AppColors.gainsboro])
-      : title = AppTypography.nunitoBold24.copyWith(
+  ThemeTypography.dark(
+    BuildContext context, [
+    Color color = AppColors.gainsboro,
+  ])  : title = AppTypography.nunitoBold20(context).copyWith(
           color: color,
         ),
-        titleMiddle = AppTypography.nunitoBold15.copyWith(
+        titleMiddle = AppTypography.nunitoBold18(context).copyWith(
           color: color,
         ),
-        normal = AppTypography.nunitoRegular13.copyWith(
+        normal = AppTypography.nunitoRegular15(context).copyWith(
           color: color,
         );
 

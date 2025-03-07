@@ -143,4 +143,70 @@ abstract class Utils {
     }
     return '';
   }
+
+  static int sortEventsAscending(
+    CalendarEventData<Incident> event1,
+    CalendarEventData<Incident> event2,
+  ) {
+    // Преобразуем строки дат в объекты DateTime для корректного сравнения
+    final dateA = event1.event?.date != null
+        ? DateTime.tryParse(event1.event!.date!)
+        : null;
+    final startDateA = event1.event?.startDate != null
+        ? DateTime.tryParse(event1.event!.startDate!)
+        : null;
+    final dateB = event2.event?.date != null
+        ? DateTime.tryParse(event2.event!.date!)
+        : null;
+    final startDateB = event2.event?.startDate != null
+        ? DateTime.tryParse(event2.event!.startDate!)
+        : null;
+
+    // Если обе даты присутствуют у обоих событий, сравниваем их
+    if (dateA != null && dateB != null) {
+      return dateA.compareTo(dateB);
+    } else if (dateA != null && startDateB != null) {
+      return dateA.compareTo(startDateB);
+    } else if (startDateA != null && dateB != null) {
+      return startDateA.compareTo(dateB);
+    } else if (startDateA != null && startDateB != null) {
+      return startDateA.compareTo(startDateB);
+    } else {
+      // Если все даты отсутствуют, считаем события равными
+      return 0;
+    }
+  }
+
+  static int sortEventsDescending(
+    CalendarEventData<Incident> event1,
+    CalendarEventData<Incident> event2,
+  ) {
+    // Преобразуем строки дат в объекты DateTime для корректного сравнения
+    final dateA = event1.event?.date != null
+        ? DateTime.tryParse(event1.event!.date!)
+        : null;
+    final startDateA = event1.event?.startDate != null
+        ? DateTime.tryParse(event1.event!.startDate!)
+        : null;
+    final dateB = event2.event?.date != null
+        ? DateTime.tryParse(event2.event!.date!)
+        : null;
+    final startDateB = event2.event?.startDate != null
+        ? DateTime.tryParse(event2.event!.startDate!)
+        : null;
+
+    // Сравниваем даты по убыванию
+    if (dateA != null && dateB != null) {
+      return dateB.compareTo(dateA);
+    } else if (dateA != null && startDateB != null) {
+      return startDateB.compareTo(dateA);
+    } else if (startDateA != null && dateB != null) {
+      return dateB.compareTo(startDateA);
+    } else if (startDateA != null && startDateB != null) {
+      return startDateB.compareTo(startDateA);
+    } else {
+      // Если все даты отсутствуют, считаем события равными
+      return 0;
+    }
+  }
 }

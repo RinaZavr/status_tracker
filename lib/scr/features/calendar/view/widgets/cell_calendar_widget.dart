@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
@@ -22,45 +24,135 @@ class CellCalendarWidget extends StatefulWidget {
 }
 
 class _CellCalendarWidgetState extends State<CellCalendarWidget> {
+  bool isFirstBuild = true; // Флаг для отслеживания первого рендера
+
+  List<Key> eventKeys = [];
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-      margin: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: widget.isToday
-            ? context.colorExt.darkBorderColor.withAlpha(70)
-            : null,
-        border: Border.all(
-          color: widget.isInMonth
-              ? context.colorExt.darkBorderColor
-              : context.colorExt.lightBorderColor,
-        ),
-      ),
-      child: widget.isInMonth
-          ? Column(
-              spacing: 2,
-              children: [
-                Text(
-                  widget.date.day.toString(),
-                  style: context.textExt.normal,
-                ),
-                if (widget.events.isNotEmpty)
-                  IncidentEventWidget(
-                    event: widget.events[0],
-                    isSmall: true,
-                  ),
-                const Spacer(),
-                if (widget.events.isNotEmpty && widget.events.length > 1)
-                  Text(
-                    '+${widget.events.length - 1}',
-                    style: context.textExt.normal,
-                  ),
-              ],
-            )
-          : null,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        log(constraints.maxHeight.toString());
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          margin: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: widget.isToday && widget.isInMonth
+                ? context.colorExt.darkBorderColor.withAlpha(70)
+                : null,
+            border: Border.all(
+              color: widget.isInMonth
+                  ? context.colorExt.darkBorderColor
+                  : context.colorExt.lightBorderColor,
+            ),
+          ),
+          child: widget.isInMonth
+              ? widget.events.isEmpty
+                  ? Column(
+                      children: [
+                        Text(
+                          widget.date.day.toString(),
+                          style: context.textExt.normal,
+                        ),
+                      ],
+                    )
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        log(constraints.maxHeight.toString());
+
+                        const double spacing = 2;
+
+                        // Высота заголовка с датой
+                        final headerHeight = _getTextHeight(
+                          widget.date.day.toString(),
+                          context.textExt.normal,
+                          constraints.maxWidth,
+                        );
+
+                        // Высота текста "+N"
+                        final moreText = '+${widget.events.length}';
+                        final moreTextHeight = _getTextHeight(
+                          moreText,
+                          context.textExt.normal,
+                          constraints.maxWidth,
+                        );
+
+                        // Доступная высота для событий
+                        var availableHeight = constraints.maxHeight -
+                            headerHeight -
+                            spacing -
+                            moreTextHeight;
+
+                        final eventWidgets = <Widget>[];
+                        double usedHeight = 0;
+                        var displayedEvents = 0;
+                        double eventHeight = 0;
+
+                        for (var i = 0; i < widget.events.length; i++) {
+                          final eventWidget = Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: spacing,
+                            ),
+                            child: IncidentEventWidget(
+                              event: widget.events[i],
+                              isSmall: true,
+                            ),
+                          );
+                          eventHeight = _getTextHeight(
+                                '${widget.events[i].event!.name[0]}'
+                                '${widget.events[i].event!.surname[0]}',
+                                context.textExt.normal,
+                                constraints.maxWidth,
+                              ) +
+                              spacing +
+                              6;
+                          if (i == widget.events.length - 1) {
+                            availableHeight -= moreTextHeight;
+                          }
+                          if (usedHeight + eventHeight > availableHeight) {
+                            break;
+                          } else {
+                            eventWidgets.add(eventWidget);
+                            displayedEvents++;
+                            usedHeight += eventHeight;
+                          }
+                        }
+
+                        return Column(
+                          mainAxisSize: MainAxisSize.min, // Фиксируем высоту
+                          children: [
+                            Text(
+                              widget.date.day.toString(),
+                              style: context.textExt.normal,
+                            ),
+                            const SizedBox(height: spacing),
+                            ...eventWidgets,
+                            if (eventWidgets.length < widget.events.length)
+                              Text(
+                                '+'
+                                '${widget.events.length - eventWidgets.length}',
+                                style: context.textExt.normal,
+                              ),
+                          ],
+                        );
+                      },
+                    )
+              : null,
+        );
+      },
     );
+  }
+
+  /// Вычисление высоты текста с учетом ширины контейнера и переноса строк
+  double _getTextHeight(String text, TextStyle style, double maxWidth) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: null,
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: maxWidth);
+
+    return textPainter.height;
   }
 }
 

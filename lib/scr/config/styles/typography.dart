@@ -5,21 +5,27 @@ abstract class AppTypography {
 
   static const String fontFamily = 'Nunito';
 
-  static const nunitoBold24 = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w600,
-    fontSize: 24,
-  );
+  // Функция для расчета адаптивного размера шрифта
+  static double getAdaptiveFontSize(BuildContext context, double baseSize) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return baseSize * (screenWidth / 448); // 360 — ширина экрана дизайна
+  }
 
-  static const nunitoBold15 = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w600,
-    fontSize: 20,
-  );
+  static TextStyle nunitoBold20(BuildContext context) => TextStyle(
+        fontFamily: fontFamily,
+        fontWeight: FontWeight.w600,
+        fontSize: getAdaptiveFontSize(context, 20),
+      );
 
-  static const nunitoRegular13 = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w400,
-    fontSize: 18,
-  );
+  static TextStyle nunitoBold18(BuildContext context) => TextStyle(
+        fontFamily: fontFamily,
+        fontWeight: FontWeight.w600,
+        fontSize: getAdaptiveFontSize(context, 18),
+      );
+
+  static TextStyle nunitoRegular15(BuildContext context) => TextStyle(
+        fontFamily: fontFamily,
+        fontWeight: FontWeight.w400,
+        fontSize: getAdaptiveFontSize(context, 15),
+      );
 }

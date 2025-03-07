@@ -23,7 +23,7 @@ class _MyRecordsScreenState extends State<MyRecordsScreen> {
   final List<IncidentStatus> _selectedStatuses = List.of(IncidentStatus.values);
   List<CalendarEventData<Incident>> events = [];
 
-  bool sortDown = true;
+  bool sortDown = false;
 
   @override
   void initState() {
@@ -50,11 +50,11 @@ class _MyRecordsScreenState extends State<MyRecordsScreen> {
     final incidentPeriod = Incident(
       id: 1,
       userId: 1,
-      name: 'test',
-      surname: 'test',
+      name: 'Веревкин',
+      surname: 'Константин',
       status: IncidentStatus.sick,
       isPeriod: true,
-      startDate: DateTime.now().withoutTime.toString(),
+      startDate: DateTime(2025, 3, 5).withoutTime.toString(),
       endDate: DateTime(2025, 3, 10).withoutTime.toString(),
     );
     final eventPeriod = CalendarEventData<Incident>(
@@ -66,7 +66,26 @@ class _MyRecordsScreenState extends State<MyRecordsScreen> {
       event: incidentPeriod,
     );
 
-    events = [eventNotPeriod, eventPeriod];
+    final incidentPeriod1 = Incident(
+      id: 1,
+      userId: 1,
+      name: 'Веревкин',
+      surname: 'Константин',
+      status: IncidentStatus.sick,
+      isPeriod: true,
+      startDate: DateTime(2025, 2, 6).withoutTime.toString(),
+      endDate: DateTime(2025, 3, 10).withoutTime.toString(),
+    );
+    final eventPeriod1 = CalendarEventData<Incident>(
+      title: incidentPeriod1.name + incidentPeriod1.surname,
+      date: DateTime.parse(incidentPeriod1.date ?? incidentPeriod1.startDate!),
+      endDate: incidentPeriod1.endDate == null
+          ? null
+          : DateTime.parse(incidentPeriod1.endDate!),
+      event: incidentPeriod1,
+    );
+
+    events = [eventNotPeriod, eventPeriod, eventPeriod1];
 
     super.initState();
   }
@@ -126,6 +145,11 @@ class _MyRecordsScreenState extends State<MyRecordsScreen> {
                     onPressed: () {
                       setState(() {
                         sortDown = !sortDown;
+                        if (sortDown) {
+                          events.sort(Utils.sortEventsAscending);
+                        } else {
+                          events.sort(Utils.sortEventsDescending);
+                        }
                       });
                     },
                     child: Icon(
@@ -201,6 +225,7 @@ class _MyRecordsScreenState extends State<MyRecordsScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
                             padding: const EdgeInsets.all(8),

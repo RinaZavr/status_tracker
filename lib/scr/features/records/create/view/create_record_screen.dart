@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
+import 'package:status_tracker/scr/config/styles/colors.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
 import 'package:status_tracker/scr/features/records/my/view/widgets/date_picker_widget.dart';
 import 'package:status_tracker/scr/features/records/my/view/widgets/incident_status_widget.dart';
@@ -103,6 +104,11 @@ class _CreateRecordScreenState extends State<CreateRecordScreen> {
                   child: Row(
                     children: [
                       Checkbox(
+                        fillColor: WidgetStatePropertyAll(
+                          isPeriod
+                              ? context.colorExt.buttonColor
+                              : Colors.transparent,
+                        ),
                         value: isPeriod,
                         onChanged: (value) {
                           setState(() {
@@ -122,7 +128,8 @@ class _CreateRecordScreenState extends State<CreateRecordScreen> {
                         backgroundColor: context.colorExt.buttonColor,
                         child: Text(
                           'Подтвердить',
-                          style: context.textExt.normal,
+                          style: context.textExt.normal
+                              .copyWith(color: AppColors.raisinblacksecond),
                         ),
                       ),
                     ],

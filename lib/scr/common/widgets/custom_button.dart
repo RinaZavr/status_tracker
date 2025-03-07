@@ -7,11 +7,13 @@ class CustomButton extends StatefulWidget {
     required this.onPressed,
     required this.child,
     this.backgroundColor,
+    this.isExpanded,
   });
 
   final VoidCallback onPressed;
   final Widget child;
   final Color? backgroundColor;
+  final bool? isExpanded;
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -20,18 +22,25 @@ class CustomButton extends StatefulWidget {
 class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor:
-            widget.backgroundColor ?? context.colorExt.backgroungIconColor,
-        foregroundColor: context.colorExt.textColor,
-        iconColor: context.colorExt.textColor,
-        shape: RoundedRectangleBorder(
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: widget.onPressed,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        width: widget.isExpanded == true ? double.maxFinite : null,
+        decoration: BoxDecoration(
+          color: widget.backgroundColor ?? context.colorExt.backgroungIconColor,
           borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(20),
+              offset: const Offset(0, 2),
+              blurRadius: 4,
+            ),
+          ],
         ),
+        child: widget.child,
       ),
-      onPressed: widget.onPressed,
-      child: widget.child,
     );
   }
 }

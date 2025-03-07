@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
+import 'package:status_tracker/scr/config/styles/colors.dart';
 import 'package:status_tracker/scr/features/auth/view/auth_screen.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/calendar_widget.dart';
 import 'package:status_tracker/scr/features/records/create/view/create_record_screen.dart';
@@ -20,6 +21,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -29,7 +32,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
         automaticallyImplyLeading: false,
         actions: [
           CustomButton(
-            child: const Icon(AppIcons.darkThemeIcon),
+            child: ThemeProvider.controllerOf(context).currentThemeId == 'dark'
+                ? const Icon(AppIcons.lightThemeIcon)
+                : const Icon(AppIcons.darkThemeIcon),
             onPressed: () {
               ThemeProvider.controllerOf(context).currentThemeId == 'dark'
                   ? ThemeProvider.controllerOf(context).setTheme('light')
@@ -70,14 +75,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
             ],
             child: name != null
-                ? Text(
-                    name!,
-                    style: context.textExt.normal,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                ? SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: Text(
+                      name!,
+                      style: context.textExt.normal,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   )
                 : CustomButton(
-                    child: Text('Войти', style: context.textExt.normal),
+                    child: Text(
+                      'Войти',
+                      style: context.textExt.normal,
+                    ),
                     onPressed: () async {
                       name = await showDialog<String>(
                         context: context,
@@ -90,42 +102,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
           ),
           const SizedBox(width: 16),
-
-          // IconButton(
-          //   icon: Text(
-          //     name,
-          //     style: context.textExt.normal,
-          //   ),
-          //   onPressed: () {
-          //     PopupMenuButton<String>(
-          //       position: PopupMenuPosition.under,
-          //       onSelected: (value) {
-          //         setState(() {
-          //           name = value;
-          //         });
-          //       },
-          //       itemBuilder: (context) => const [
-          //         PopupMenuItem(
-          //           value: 'Имя Фамилия',
-          //           child: Text('Имя Фамилия'),
-          //         ),
-          //         PopupMenuItem(
-          //           value: 'Имя Фамилия2',
-          //           child: Text('Имя Фамилия2'),
-          //         ),
-          //       ],
-          //     );
-          //   },
-          // ),
         ],
       ),
-      body: Stack(
+      body: Column(
         children: [
-          const CalendarWidget(),
+          const Expanded(child: CalendarWidget()),
           if (name != null)
-            Positioned(
-              bottom: 30,
-              right: 30,
+            Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: MediaQuery.of(context).padding.bottom + 16,
+              ),
               child: CustomButton(
                 onPressed: () {
                   showDialog(
@@ -136,7 +124,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   );
                 },
                 backgroundColor: context.colorExt.buttonColor,
-                child: const Icon(AppIcons.addIcon),
+                isExpanded: true,
+                child: const Icon(
+                  AppIcons.addIcon,
+                  color: AppColors.raisinblacksecond,
+                ),
               ),
             ),
         ],

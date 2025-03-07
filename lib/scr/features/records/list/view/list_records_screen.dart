@@ -43,17 +43,23 @@ class _ListRecordsScreenState extends State<ListRecordsScreen> {
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8),
-              child: IncidentEventWidget(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 5,
+            ),
+            itemBuilder: (context, index) {
+              return IncidentEventWidget(
                 event: widget.events[index],
                 isSmall: false,
-              ),
-            );
-          },
-          itemCount: widget.events.length,
+              );
+            },
+            itemCount: widget.events.length,
+          ),
         ),
       ),
     );

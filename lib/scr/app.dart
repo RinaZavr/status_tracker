@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +36,8 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    log(MediaQuery.of(context).size.width.toString(), name: 'width');
+    log(MediaQuery.of(context).size.height.toString(), name: 'height');
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent,
@@ -48,15 +52,16 @@ class _AppState extends State<App> {
     return ThemeProvider(
       saveThemesOnChange: true,
       loadThemeOnInit: true,
+      defaultThemeId: 'dark',
       themes: [
         AppTheme(
           id: 'light',
-          data: AppThemes.light,
+          data: AppThemes.light(context),
           description: 'light',
         ),
         AppTheme(
           id: 'dark',
-          data: AppThemes.dark,
+          data: AppThemes.dark(context),
           description: 'dark',
         ),
       ],

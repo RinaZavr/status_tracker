@@ -18,26 +18,27 @@ class IncidentEventWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final statusUi = Utils.getStatusUi(context, event.event!.status);
     return Container(
-      padding: EdgeInsets.all(isSmall ? 2 : 8),
+      padding: EdgeInsets.all(isSmall ? 3 : 8),
       width: double.maxFinite,
       decoration: BoxDecoration(
         color: statusUi['color'],
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
-        spacing: 4,
+        spacing: 2,
         children: [
           Icon(
             statusUi['icon'],
             size: isSmall ? 15 : 20,
           ),
-          Text(
-            isSmall
-                ? '${event.event!.name[0]} ${event.event!.surname[0]}'
-                : '${event.event!.name} ${event.event!.surname}',
-            style: context.textExt.normal,
+          Expanded(
+            child: Text(
+              isSmall
+                  ? '${event.event!.name[0]}${event.event!.surname[0]}'
+                  : '${event.event!.name} ${event.event!.surname}',
+              style: context.textExt.normal.copyWith(height: 1),
+            ),
           ),
         ],
       ),
