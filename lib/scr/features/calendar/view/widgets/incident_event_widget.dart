@@ -24,24 +24,30 @@ class IncidentEventWidget extends StatelessWidget {
         color: statusUi['color'],
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 2,
-        children: [
-          Icon(
-            statusUi['icon'],
-            size: isSmall ? 15 : 20,
-          ),
-          Expanded(
-            child: Text(
-              isSmall
-                  ? '${event.event!.name[0]}${event.event!.surname[0]}'
-                  : '${event.event!.name} ${event.event!.surname}',
-              style: context.textExt.normal.copyWith(height: 1),
+      child: isSmall
+          ? Center(
+              child: Text(
+                '${event.event!.name[0]}${event.event!.surname[0]}',
+                style: context.textExt.normal.copyWith(height: 1),
+              ),
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 2,
+              children: [
+                Icon(
+                  statusUi['icon'],
+                  size: isSmall ? 15 : 20,
+                ),
+                Expanded(
+                  child: Text(
+                    '${event.event!.name} ${event.event!.surname}',
+                    style: context.textExt.normal.copyWith(height: 1),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

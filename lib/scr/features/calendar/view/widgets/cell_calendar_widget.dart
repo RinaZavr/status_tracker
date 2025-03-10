@@ -86,7 +86,6 @@ class _CellCalendarWidgetState extends State<CellCalendarWidget> {
 
                         final eventWidgets = <Widget>[];
                         double usedHeight = 0;
-                        var displayedEvents = 0;
                         double eventHeight = 0;
 
                         for (var i = 0; i < widget.events.length; i++) {
@@ -108,13 +107,12 @@ class _CellCalendarWidgetState extends State<CellCalendarWidget> {
                               spacing +
                               6;
                           if (i == widget.events.length - 1) {
-                            availableHeight -= moreTextHeight;
+                            availableHeight += moreTextHeight;
                           }
                           if (usedHeight + eventHeight > availableHeight) {
                             break;
                           } else {
                             eventWidgets.add(eventWidget);
-                            displayedEvents++;
                             usedHeight += eventHeight;
                           }
                         }
@@ -128,6 +126,7 @@ class _CellCalendarWidgetState extends State<CellCalendarWidget> {
                             ),
                             const SizedBox(height: spacing),
                             ...eventWidgets,
+                            const Spacer(),
                             if (eventWidgets.length < widget.events.length)
                               Text(
                                 '+'
@@ -148,7 +147,7 @@ class _CellCalendarWidgetState extends State<CellCalendarWidget> {
   double _getTextHeight(String text, TextStyle style, double maxWidth) {
     final textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
-      maxLines: null,
+      maxLines: 1,
       textDirection: TextDirection.ltr,
     )..layout(maxWidth: maxWidth);
 

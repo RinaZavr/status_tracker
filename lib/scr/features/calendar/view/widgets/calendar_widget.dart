@@ -28,7 +28,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       surname: 'Константин',
       status: IncidentStatus.remote,
       isPeriod: false,
-      date: DateTime.now().withoutTime.toString(),
+      date: DateTime(2025, 3, 5).withoutTime.toString(),
     );
     final eventNotPeriod = CalendarEventData<Incident>(
       title: incidentNotPeriod.name + incidentNotPeriod.surname,
@@ -44,11 +44,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     final incidentPeriod1 = Incident(
       id: 1,
       userId: 1,
-      name: 'Веревкин',
-      surname: 'Константин',
+      name: 'Ж',
+      surname: 'Ш',
       status: IncidentStatus.sick,
       isPeriod: true,
-      startDate: DateTime.now().withoutTime.toString(),
+      startDate: DateTime(2025, 3, 5).withoutTime.toString(),
       endDate: DateTime(2025, 3, 10).withoutTime.toString(),
     );
     final eventPeriod1 = CalendarEventData<Incident>(
@@ -67,7 +67,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       surname: 'Константин',
       status: IncidentStatus.sick,
       isPeriod: true,
-      startDate: DateTime.now().withoutTime.toString(),
+      startDate: DateTime(2025, 3, 5).withoutTime.toString(),
       endDate: DateTime(2025, 3, 10).withoutTime.toString(),
     );
     final eventPeriod = CalendarEventData<Incident>(
@@ -158,7 +158,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     // Количество дней в месяце
     final daysInMonth = lastDayOfMonth.day;
 
-    // Номер дня недели для первого дня месяца (1 = понедельник, 7 = воскресенье)
+    // Номер дня недели для первого дня месяца
+    // (1 = понедельник, 7 = воскресенье)
     final firstWeekday = firstDayOfMonth.weekday;
 
     // Количество недель

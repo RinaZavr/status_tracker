@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
+import 'package:status_tracker/scr/config/router/routes.dart';
 import 'package:status_tracker/scr/config/styles/colors.dart';
-import 'package:status_tracker/scr/features/auth/view/auth_screen.dart';
+import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/calendar_widget.dart';
 import 'package:status_tracker/scr/features/records/create/view/create_record_screen.dart';
 import 'package:status_tracker/scr/features/records/my/view/my_records_screen.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -21,8 +22,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -32,13 +31,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
         automaticallyImplyLeading: false,
         actions: [
           CustomButton(
-            child: ThemeProvider.controllerOf(context).currentThemeId == 'dark'
+            child: context.watch<ThemeCubit>().state.isDark
                 ? const Icon(AppIcons.lightThemeIcon)
                 : const Icon(AppIcons.darkThemeIcon),
             onPressed: () {
-              ThemeProvider.controllerOf(context).currentThemeId == 'dark'
-                  ? ThemeProvider.controllerOf(context).setTheme('light')
-                  : ThemeProvider.controllerOf(context).setTheme('dark');
+              context.read<ThemeCubit>().toggleTheme();
             },
           ),
           const SizedBox(width: 10),
@@ -90,14 +87,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       'Войти',
                       style: context.textExt.normal,
                     ),
-                    onPressed: () async {
-                      name = await showDialog<String>(
-                        context: context,
-                        builder: (context) {
-                          return const AuthScreen();
-                        },
-                      );
-                      setState(() {});
+                    onPressed: () {
+                      AuthRoute().push(context).then((value) {
+                        setState(() {
+                          name = value;
+                        });
+                      });
                     },
                   ),
           ),
