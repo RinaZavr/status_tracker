@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:api/api_client.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/config/router/router.dart';
 import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
 import 'package:status_tracker/scr/config/styles/themes.dart';
-import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -37,8 +35,6 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    log(MediaQuery.of(context).size.width.toString(), name: 'width');
-    log(MediaQuery.of(context).size.height.toString(), name: 'height');
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent,

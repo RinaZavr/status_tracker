@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
@@ -64,8 +62,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             child: CustomButton(
               onPressed: () {
                 if (loginForm.currentState!.validate()) {
-                  log('Login: ${loginController.text}');
-                  log('Password: ${passwordController.text}');
                   context.pop(loginController.text);
                 }
               },

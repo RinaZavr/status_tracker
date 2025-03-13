@@ -1,7 +1,7 @@
+import 'package:api/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/utils/utils.dart';
-import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
 
 class IncidentStatusWidget extends StatelessWidget {
   const IncidentStatusWidget({

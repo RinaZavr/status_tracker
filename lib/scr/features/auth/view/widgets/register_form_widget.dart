@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -163,8 +161,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
             child: CustomButton(
               onPressed: () {
                 if (loginForm.currentState!.validate()) {
-                  log('Login: ${loginController.text}');
-                  log('Password: ${passwordController.text}');
                   context.pop(loginController.text);
                 }
               },

@@ -1,3 +1,4 @@
+import 'package:api/api_client.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,7 +6,6 @@ import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/utils/utils.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
-import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
 import 'package:status_tracker/scr/features/records/create/view/create_record_screen.dart';
 import 'package:status_tracker/scr/features/records/my/view/widgets/incident_status_widget.dart';
 import 'package:status_tracker/scr/features/records/my/view/widgets/time_filter_widget.dart';

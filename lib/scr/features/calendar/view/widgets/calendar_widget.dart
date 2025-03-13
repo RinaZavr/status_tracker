@@ -1,3 +1,4 @@
+import 'package:api/api_client.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
@@ -21,6 +22,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   void initState() {
+    getUser();
     final incidentNotPeriod = Incident(
       id: 0,
       userId: 0,
@@ -84,6 +86,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       ..add(eventPeriod)
       ..add(eventPeriod1);
     super.initState();
+  }
+
+  Future<void> getUser() async {
+    await AuthService().login(
+      login: 'Kjan',
+      password: 'kostya123',
+    );
   }
 
   @override

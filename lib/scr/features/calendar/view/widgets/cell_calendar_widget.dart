@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:api/api_client.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
@@ -32,7 +31,6 @@ class _CellCalendarWidgetState extends State<CellCalendarWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        log(constraints.maxHeight.toString());
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
           margin: const EdgeInsets.all(2),
@@ -59,8 +57,6 @@ class _CellCalendarWidgetState extends State<CellCalendarWidget> {
                     )
                   : LayoutBuilder(
                       builder: (context, constraints) {
-                        log(constraints.maxHeight.toString());
-
                         const double spacing = 2;
 
                         // Высота заголовка с датой
@@ -155,67 +151,67 @@ class _CellCalendarWidgetState extends State<CellCalendarWidget> {
   }
 }
 
-enum IncidentStatus {
-  remote('Удаленно'),
-  sick('Болезнь'),
-  vacation('Отпуск'),
-  study('Учеба'),
-  other('Другое');
+// enum IncidentStatus {
+//   remote('Удаленно'),
+//   sick('Болезнь'),
+//   vacation('Отпуск'),
+//   study('Учеба'),
+//   other('Другое');
 
-  const IncidentStatus(this.name);
-  final String name;
+//   const IncidentStatus(this.name);
+//   final String name;
 
-  String toShortString() {
-    return toString().split('.').last.toUpperCase();
-  }
-}
+//   String toShortString() {
+//     return toString().split('.').last.toUpperCase();
+//   }
+// }
 
-class Incident {
-  Incident({
-    required this.id,
-    required this.userId,
-    required this.name,
-    required this.surname,
-    required this.status,
-    this.date,
-    required this.isPeriod,
-    this.startDate,
-    this.endDate,
-  });
+// class Incident {
+//   Incident({
+//     required this.id,
+//     required this.userId,
+//     required this.name,
+//     required this.surname,
+//     required this.status,
+//     this.date,
+//     required this.isPeriod,
+//     this.startDate,
+//     this.endDate,
+//   });
 
-  factory Incident.fromJson(Map<String, dynamic> json) => Incident(
-        id: json['id'],
-        userId: json['userId'],
-        name: json['name'],
-        surname: json['surname'],
-        status: IncidentStatus.values
-            .where((element) => element.toShortString() == json['status'])
-            .first,
-        date: json['date'],
-        isPeriod: json['isPeriod'],
-        startDate: json['startDate'],
-        endDate: json['endDate'],
-      );
+//   factory Incident.fromJson(Map<String, dynamic> json) => Incident(
+//         id: json['id'],
+//         userId: json['userId'],
+//         name: json['name'],
+//         surname: json['surname'],
+//         status: IncidentStatus.values
+//             .where((element) => element.toShortString() == json['status'])
+//             .first,
+//         date: json['date'],
+//         isPeriod: json['isPeriod'],
+//         startDate: json['startDate'],
+//         endDate: json['endDate'],
+//       );
 
-  int id;
-  int userId;
-  String name;
-  String surname;
-  IncidentStatus status;
-  String? date;
-  bool isPeriod;
-  String? startDate;
-  String? endDate;
+//   int id;
+//   int userId;
+//   String name;
+//   String surname;
+//   IncidentStatus status;
+//   String? date;
+//   bool isPeriod;
+//   String? startDate;
+//   String? endDate;
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'userId': userId,
-        'name': name,
-        'surname': surname,
-        'status': status.toShortString(),
-        'date': date,
-        'isPeriod': isPeriod,
-        'startDate': startDate,
-        'endDate': endDate,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         'id': id,
+//         'userId': userId,
+//         'name': name,
+//         'surname': surname,
+//         'status': status.toShortString(),
+//         'date': date,
+//         'isPeriod': isPeriod,
+//         'startDate': startDate,
+//         'endDate': endDate,
+//       };
+// }

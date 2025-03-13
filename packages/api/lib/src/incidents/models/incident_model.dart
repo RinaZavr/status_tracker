@@ -1,5 +1,8 @@
-import 'dart:convert';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'incident_model.g.dart';
+
+@JsonSerializable()
 class Incident {
   Incident({
     required this.id,
@@ -7,67 +10,77 @@ class Incident {
     required this.name,
     required this.surname,
     required this.status,
-    required this.date,
+    this.date,
     required this.isPeriod,
-    required this.startDate,
-    required this.endDate,
+    this.startDate,
+    this.endDate,
   });
 
-  factory Incident.fromMap(Map<String, dynamic> map) {
-    return Incident(
-      id: map['id']?.toInt() ?? 0,
-      userId: map['userId']?.toInt() ?? 0,
-      name: map['name'] ?? '',
-      surname: map['surname'] ?? '',
-      status: IncidentStatus.values
-          .where((element) => element.toShortString() == map['status'])
-          .first,
-      date: map['date'] ?? '',
-      isPeriod: map['isPeriod'] ?? false,
-      startDate: map['startDate'] ?? '',
-      endDate: map['endDate'] ?? '',
-    );
-  }
+  factory Incident.fromJson(Map<String, dynamic> json) =>
+      _$IncidentFromJson(json);
 
-  factory Incident.fromJson(String source) =>
-      Incident.fromMap(json.decode(source));
+  Map<String, dynamic> toJson() => _$IncidentToJson(this);
+
   final int id;
   final int userId;
   final String name;
   final String surname;
   final IncidentStatus status;
-  final String date;
+  final String? date;
   final bool isPeriod;
-  final String startDate;
-  final String endDate;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'userId': userId,
-      'name': name,
-      'surname': surname,
-      'status': status.toShortString(),
-      'date': date,
-      'isPeriod': isPeriod,
-      'startDate': startDate,
-      'endDate': endDate,
-    };
-  }
-
-  String toJson() => json.encode(toMap());
+  final String? startDate;
+  final String? endDate;
 }
 
+@JsonEnum(alwaysCreate: true)
 enum IncidentStatus {
+  @JsonValue('REMOTE')
   remote('Удаленно'),
+  @JsonValue('SICK')
   sick('Болезнь'),
+  @JsonValue('VACATION')
   vacation('Отпуск'),
+  @JsonValue('STUDY')
   study('Учеба'),
+  @JsonValue('OTHER')
   other('Другое');
 
   const IncidentStatus(this.name);
-  final String name;
 
-  String toShortString() {
-    return toString().split('.').last.toUpperCase();
+  String toJsonValue() {
+    return _$IncidentStatusEnumMap[this] ??
+        ''; // Возвращает строковое значение, заданное через @JsonValue
   }
+
+  final String name;
+}
+
+@JsonEnum(alwaysCreate: true)
+enum PeriodName {
+  @JsonValue('DAY')
+  day('Текущий день'),
+
+  @JsonValue('WEEK')
+  week('Текущая неделя'),
+
+  @JsonValue('MONTH')
+  month('Текущий месяц'),
+
+  @JsonValue('YEAR')
+  year('Текущий год'),
+
+  @JsonValue('ALL')
+  all('Все'),
+
+  @JsonValue('PERIOD')
+  period('Произвольный период');
+
+  const PeriodName(this.name);
+
+  String toJsonValue() {
+    return _$PeriodNameEnumMap[this] ??
+        ''; // Возвращает строковое значение, заданное через @JsonValue
+  }
+
+  final String name;
 }
