@@ -32,6 +32,7 @@ class AuthService {
     required String login,
     required String email,
     required String password,
+    required String secretKey,
   }) async {
     final response = await _dioClient.dio.post(
       '/auth/register',
@@ -41,10 +42,11 @@ class AuthService {
         'login': login,
         'email': email,
         'password': password,
+        'key': secretKey,
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       await SecureStorage.saveToken(response.data['token']);
       _dioClient.user = User.fromJson(response.data);
 
@@ -54,11 +56,8 @@ class AuthService {
     return null;
   }
 
-  Future<User?> me({
-    required String login,
-    required String password,
-  }) async {
-    final response = await _dioClient.dio.post(
+  Future<User?> me() async {
+    final response = await _dioClient.dio.get(
       '/auth/me',
     );
 
@@ -71,10 +70,7 @@ class AuthService {
     return null;
   }
 
-  Future<void> logout({
-    required String login,
-    required String password,
-  }) async {
+  Future<void> logout() async {
     await SecureStorage.deleteToken();
     _dioClient.user = null;
   }

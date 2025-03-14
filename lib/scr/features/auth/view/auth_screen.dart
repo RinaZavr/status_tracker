@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
+import 'package:status_tracker/scr/features/auth/bloc/auth_bloc.dart';
 import 'package:status_tracker/scr/features/auth/view/widgets/login_form_widget.dart';
 import 'package:status_tracker/scr/features/auth/view/widgets/register_form_widget.dart';
 import 'package:status_tracker/scr/features/auth/view/widgets/tab_widget.dart';
@@ -58,13 +60,17 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: _selectedIndex == 0
-              ? const LoginFormWidget()
-              : const RegisterFormWidget(),
-        ),
+      body: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: _selectedIndex == 0
+                  ? const LoginFormWidget()
+                  : const RegisterFormWidget(),
+            ),
+          );
+        },
       ),
     );
   }

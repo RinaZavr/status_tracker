@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
 import 'package:status_tracker/scr/config/styles/colors.dart';
+import 'package:status_tracker/scr/features/auth/bloc/auth_bloc.dart';
 import 'package:status_tracker/scr/features/auth/view/widgets/custom_text_field.dart';
 
 class LoginFormWidget extends StatefulWidget {
@@ -62,7 +64,15 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             child: CustomButton(
               onPressed: () {
                 if (loginForm.currentState!.validate()) {
-                  context.pop(loginController.text);
+                  context.read<AuthBloc>().add(
+                        AuthLoginEvent(
+                          login: loginController.text,
+                          password: passwordController.text,
+                        ),
+                      );
+                  if (context.read<AuthBloc>().isAuthorized()) {
+                    context.pop();
+                  }
                 }
               },
               backgroundColor: context.colorExt.buttonColor,

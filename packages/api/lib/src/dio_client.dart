@@ -27,6 +27,7 @@ class DioClient {
 
   late final Dio dio;
   late final String baseUrl;
+  late final Function() showSnackBar;
 
   User? user;
 }

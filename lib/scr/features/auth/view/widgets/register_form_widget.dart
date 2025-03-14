@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/common/widgets/custom_button.dart';
 import 'package:status_tracker/scr/config/styles/colors.dart';
+import 'package:status_tracker/scr/features/auth/bloc/auth_bloc.dart';
 import 'package:status_tracker/scr/features/auth/view/widgets/custom_text_field.dart';
 
 class RegisterFormWidget extends StatefulWidget {
@@ -41,6 +43,8 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
             hintText: 'Введите логин',
             validator: (value) {
               if (value == null || value.isEmpty) {
+                return 'Логин обязателен';
+              } else if (!RegExp(r'(^[a-zA-Z0-9_]+$)').hasMatch(value)) {
                 return 'Логин только на латинице';
               }
               return null;
@@ -57,6 +61,9 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Email обязателен';
+              } else if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
+                  .hasMatch(value)) {
+                return 'Некорректный формат email';
               }
               return null;
             },
@@ -117,7 +124,9 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
             obscureText: true,
             hintText: 'Повторите пароль',
             validator: (value) {
-              if (value == null || value.isEmpty) {
+              if (value == null ||
+                  value.isEmpty ||
+                  value != passwordController.text) {
                 return 'Повторите пароль';
               }
               return null;
@@ -161,7 +170,19 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
             child: CustomButton(
               onPressed: () {
                 if (loginForm.currentState!.validate()) {
-                  context.pop(loginController.text);
+                  context.read<AuthBloc>().add(
+                        AuthRegisterEvent(
+                          name: nameController.text,
+                          surname: surnameController.text,
+                          email: emailController.text,
+                          login: loginController.text,
+                          password: passwordController.text,
+                          secretKey: keyController.text,
+                        ),
+                      );
+                  if (context.read<AuthBloc>().isAuthorized()) {
+                    context.pop();
+                  }
                 }
               },
               backgroundColor: context.colorExt.buttonColor,
