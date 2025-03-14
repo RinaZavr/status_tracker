@@ -1,9 +1,14 @@
 import 'package:api/api_client.dart';
 import 'package:calendar_view/calendar_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:status_tracker/main.dart';
 import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
+import 'package:status_tracker/scr/config/styles/colors.dart';
+import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
 import 'package:status_tracker/scr/features/records/my/view/my_records_screen.dart';
 
 abstract class Utils {
@@ -208,5 +213,88 @@ abstract class Utils {
       // Если все даты отсутствуют, считаем события равными
       return 0;
     }
+  }
+
+  static void showSnackBar({
+    required String title,
+    required String message,
+    bool? isError,
+  }) {
+    final isDark =
+        scaffoldMessengerKey.currentContext?.read<ThemeCubit>().state.isDark ==
+            true;
+    var backgroundColor = AppColors.raisinblack;
+    var iconColor = AppColors.gainsboro;
+    final textColor =
+        isDark == true ? AppColors.gainsboro : AppColors.raisinblack;
+
+    var icon = CupertinoIcons.check_mark_circled;
+
+    if (isError == true) {
+      icon = CupertinoIcons.exclamationmark_circle;
+
+      if (isDark) {
+        backgroundColor = AppColors.cerise;
+        iconColor = AppColors.paradisePink;
+      } else {
+        backgroundColor = AppColors.electricCrimson;
+        iconColor = AppColors.crimsonGlory;
+      }
+    } else {
+      icon = CupertinoIcons.check_mark_circled;
+
+      if (isDark) {
+        backgroundColor = AppColors.oceanGreen;
+        iconColor = AppColors.greenSheen;
+      } else {
+        backgroundColor = AppColors.mediumSeaGreen;
+        iconColor = AppColors.seaGreen;
+      }
+    }
+
+    final messageTextStyle = TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 15,
+      color: textColor,
+    );
+
+    final titleTextStyle = TextStyle(
+      fontWeight: FontWeight.w700,
+      fontSize: 18,
+      color: textColor,
+    );
+
+    scaffoldMessengerKey.currentState?.showSnackBar(
+      SnackBar(
+        backgroundColor: backgroundColor,
+        behavior: SnackBarBehavior.fixed,
+        duration: const Duration(milliseconds: 1500),
+        content: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            spacing: 16,
+            children: [
+              Icon(
+                icon,
+                color: iconColor,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: titleTextStyle,
+                  ),
+                  Text(
+                    message,
+                    style: messageTextStyle,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -6,9 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:status_tracker/main.dart';
 import 'package:status_tracker/scr/config/router/router.dart';
 import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
 import 'package:status_tracker/scr/config/styles/themes.dart';
+import 'package:status_tracker/scr/features/auth/bloc/auth_bloc.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -45,30 +47,13 @@ class _AppState extends State<App> {
                 : Brightness.dark,
       ),
     );
-
-    // return ThemeProvider(
-    //   saveThemesOnChange: true,
-    //   loadThemeOnInit: true,
-    //   defaultThemeId: 'dark',
-    //   themes: [
-    //     AppTheme(
-    //       id: 'light',
-    //       data: AppThemes.light(context),
-    //       description: 'light',
-    //     ),
-    //     AppTheme(
-    //       id: 'dark',
-    //       data: AppThemes.dark(context),
-    //       description: 'dark',
-    //     ),
-    //   ],
-    //   child: ThemeConsumer(
-    //     child: Builder(
-    //       builder: (context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => ThemeCubit(),
+        ),
+        BlocProvider(
+          create: (context) => AuthBloc()..add(AuthGetMeEvent()),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
@@ -76,6 +61,7 @@ class _AppState extends State<App> {
           return CalendarControllerProvider<Incident>(
             controller: EventController<Incident>(),
             child: MaterialApp.router(
+              scaffoldMessengerKey: scaffoldMessengerKey,
               debugShowCheckedModeBanner: false,
               theme: state.isDark
                   ? AppThemes.dark(context)
@@ -92,9 +78,5 @@ class _AppState extends State<App> {
         },
       ),
     );
-    //       },
-    //     ),
-    //   ),
-    // );
   }
 }

@@ -20,4 +20,13 @@ abstract class AppColors {
   static const Color white = Color(0xffffffff);
   static const Color platinum = Color(0xffe5e5e5);
   static const Color pictonblue = Color(0xff49a1f2);
+
+  static const Color oceanGreen = Color(0x334db09b);
+  static const Color greenSheen = Color(0xff5fb8a5);
+  static const Color mediumSeaGreen = Color(0x2632ba76);
+  static const Color seaGreen = Color(0xff2d8b5d);
+  static const Color cerise = Color(0x33e5325d);
+  static const Color paradisePink = Color(0xffe8476d);
+  static const Color electricCrimson = Color(0x26ff003d);
+  static const Color crimsonGlory = Color(0xffbd0935);
 }
