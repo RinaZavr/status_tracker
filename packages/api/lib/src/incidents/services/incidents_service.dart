@@ -9,8 +9,8 @@ class IncidentsService {
   }) async {
     final response = await _dioClient.dio.get(
       '/incidents/all',
-      data: {
-        'month': month,
+      queryParameters: {
+        'month': month - 1,
         'year': year,
       },
     );

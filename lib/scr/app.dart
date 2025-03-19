@@ -11,6 +11,7 @@ import 'package:status_tracker/scr/config/router/router.dart';
 import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
 import 'package:status_tracker/scr/config/styles/themes.dart';
 import 'package:status_tracker/scr/features/auth/bloc/auth_bloc.dart';
+import 'package:status_tracker/scr/features/calendar/bloc/calendar_bloc.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -54,6 +55,9 @@ class _AppState extends State<App> {
         ),
         BlocProvider(
           create: (context) => AuthBloc()..add(AuthGetMeEvent()),
+        ),
+        BlocProvider(
+          create: (context) => CalendarBloc(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(

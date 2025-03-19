@@ -24,14 +24,14 @@ class _HeaderCalendarWidgetState extends State<HeaderCalendarWidget> {
   @override
   void initState() {
     headerText = _getHeader(
-      date: DateTime.now(),
+      date: widget.date,
     );
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant HeaderCalendarWidget oldWidget) {
-    if (widget.date != oldWidget.date) {
+    if (widget.date.month != oldWidget.date.month) {
       headerText = _getHeader(date: widget.date);
     }
     super.didUpdateWidget(oldWidget);

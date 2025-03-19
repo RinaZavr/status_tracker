@@ -1,6 +1,9 @@
 import 'package:api/api_client.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
+import 'package:status_tracker/scr/features/calendar/bloc/calendar_bloc.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/cell_calendar_widget.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/header_calendar_widget.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/weekday_calendar_widget.dart';
@@ -14,140 +17,176 @@ class CalendarWidget extends StatefulWidget {
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
-  final GlobalKey<MonthViewState> state = GlobalKey<MonthViewState>();
+  final GlobalKey<MonthViewState> monthState = GlobalKey<MonthViewState>();
   final EventController<Incident> controller = EventController<Incident>();
 
   DateTime _currentDate =
       DateTime.now(); // Текущая дата для отслеживания месяца
 
+  // @override
+  // void initState() {
+  //   final incidentNotPeriod = Incident(
+  //     id: 0,
+  //     userId: 0,
+  //     name: 'Веревкин',
+  //     surname: 'Константин',
+  //     status: IncidentStatus.remote,
+  //     isPeriod: false,
+  //     date: DateTime(2025, 3, 5).withoutTime.toString(),
+  //   );
+  //   final eventNotPeriod = CalendarEventData<Incident>(
+  //     title: incidentNotPeriod.name + incidentNotPeriod.surname,
+  //     date: DateTime.parse(
+  //       incidentNotPeriod.date ?? incidentNotPeriod.startDate!,
+  //     ),
+  //     endDate: incidentNotPeriod.endDate == null
+  //         ? null
+  //         : DateTime.parse(incidentNotPeriod.endDate!),
+  //     event: incidentNotPeriod,
+  //   );
+
+  //   final incidentPeriod1 = Incident(
+  //     id: 1,
+  //     userId: 1,
+  //     name: 'Ж',
+  //     surname: 'Ш',
+  //     status: IncidentStatus.sick,
+  //     isPeriod: true,
+  //     startDate: DateTime(2025, 3, 5).withoutTime.toString(),
+  //     endDate: DateTime(2025, 3, 10).withoutTime.toString(),
+  //   );
+  //   final eventPeriod1 = CalendarEventData<Incident>(
+  //     title: incidentPeriod1.name + incidentPeriod1.surname,
+  //     date: DateTime.parse(incidentPeriod1.date ?? incidentPeriod1.startDate!),
+  //     endDate: incidentPeriod1.endDate == null
+  //         ? null
+  //         : DateTime.parse(incidentPeriod1.endDate!),
+  //     event: incidentPeriod1,
+  //   );
+
+  //   final incidentPeriod = Incident(
+  //     id: 1,
+  //     userId: 1,
+  //     name: 'Веревкин',
+  //     surname: 'Константин',
+  //     status: IncidentStatus.sick,
+  //     isPeriod: true,
+  //     startDate: DateTime(2025, 3, 5).withoutTime.toString(),
+  //     endDate: DateTime(2025, 3, 10).withoutTime.toString(),
+  //   );
+  //   final eventPeriod = CalendarEventData<Incident>(
+  //     title: incidentPeriod.name + incidentPeriod.surname,
+  //     date: DateTime.parse(incidentPeriod.date ?? incidentPeriod.startDate!),
+  //     endDate: incidentPeriod.endDate == null
+  //         ? null
+  //         : DateTime.parse(incidentPeriod.endDate!),
+  //     event: incidentPeriod,
+  //   );
+
+  //   controller
+  //     ..add(eventNotPeriod)
+  //     ..add(eventPeriod)
+  //     ..add(eventPeriod1);
+  //   super.initState();
+  // }
+
   @override
   void initState() {
-    final incidentNotPeriod = Incident(
-      id: 0,
-      userId: 0,
-      name: 'Веревкин',
-      surname: 'Константин',
-      status: IncidentStatus.remote,
-      isPeriod: false,
-      date: DateTime(2025, 3, 5).withoutTime.toString(),
-    );
-    final eventNotPeriod = CalendarEventData<Incident>(
-      title: incidentNotPeriod.name + incidentNotPeriod.surname,
-      date: DateTime.parse(
-        incidentNotPeriod.date ?? incidentNotPeriod.startDate!,
-      ),
-      endDate: incidentNotPeriod.endDate == null
-          ? null
-          : DateTime.parse(incidentNotPeriod.endDate!),
-      event: incidentNotPeriod,
-    );
-
-    final incidentPeriod1 = Incident(
-      id: 1,
-      userId: 1,
-      name: 'Ж',
-      surname: 'Ш',
-      status: IncidentStatus.sick,
-      isPeriod: true,
-      startDate: DateTime(2025, 3, 5).withoutTime.toString(),
-      endDate: DateTime(2025, 3, 10).withoutTime.toString(),
-    );
-    final eventPeriod1 = CalendarEventData<Incident>(
-      title: incidentPeriod1.name + incidentPeriod1.surname,
-      date: DateTime.parse(incidentPeriod1.date ?? incidentPeriod1.startDate!),
-      endDate: incidentPeriod1.endDate == null
-          ? null
-          : DateTime.parse(incidentPeriod1.endDate!),
-      event: incidentPeriod1,
-    );
-
-    final incidentPeriod = Incident(
-      id: 1,
-      userId: 1,
-      name: 'Веревкин',
-      surname: 'Константин',
-      status: IncidentStatus.sick,
-      isPeriod: true,
-      startDate: DateTime(2025, 3, 5).withoutTime.toString(),
-      endDate: DateTime(2025, 3, 10).withoutTime.toString(),
-    );
-    final eventPeriod = CalendarEventData<Incident>(
-      title: incidentPeriod.name + incidentPeriod.surname,
-      date: DateTime.parse(incidentPeriod.date ?? incidentPeriod.startDate!),
-      endDate: incidentPeriod.endDate == null
-          ? null
-          : DateTime.parse(incidentPeriod.endDate!),
-      event: incidentPeriod,
-    );
-
-    controller
-      ..add(eventNotPeriod)
-      ..add(eventPeriod)
-      ..add(eventPeriod1);
+    context.read<CalendarBloc>().add(
+          GetMonthEvents(
+            date: DateTime.now(),
+          ),
+        );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final weeksInMonth = _getWeeksInMonth(_currentDate);
-
-    // Доступная высота календаря
-    final availableHeight = MediaQuery.of(context).size.height * 3 / 4;
-
-    // Рассчитываем cellAspectRatio
-    final cellAspectRatio = _calculateCellAspectRatio(
-      availableHeight,
-      weeksInMonth,
-      MediaQuery.of(context).size.width,
-    );
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: MonthView<Incident>(
-        key: state,
-        controller: controller,
-        showBorder: false,
-        hideDaysNotInMonth: true,
-        cellAspectRatio: cellAspectRatio,
-        headerBuilder: (date) {
-          return HeaderCalendarWidget(
-            state: state,
-            date: date,
+    return BlocBuilder<CalendarBloc, CalendarState>(
+      builder: (context, state) {
+        if (state is CalendarLoadingState) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is CalendarErrorState) {
+          return Center(
+            child: Text(
+              state.error,
+              style: context.textExt.normal,
+            ),
           );
-        },
-        weekDayBuilder: (day) {
-          return WeekdayCalendarWidget(
-            day: day,
+        }
+        if (state is CalendarLoadedState) {
+          controller.addAll(state.events);
+          final weeksInMonth = _getWeeksInMonth(_currentDate);
+
+          // Доступная высота календаря
+          final availableHeight = MediaQuery.of(context).size.height * 3 / 4;
+
+          // Рассчитываем cellAspectRatio
+          final cellAspectRatio = _calculateCellAspectRatio(
+            availableHeight,
+            weeksInMonth,
+            MediaQuery.of(context).size.width,
           );
-        },
-        cellBuilder: (date, events, isToday, isInMonth, hideDaysNotInMonth) {
-          return CellCalendarWidget(
-            date: date,
-            events: events,
-            isToday: isToday,
-            isInMonth: isInMonth,
-          );
-        },
-        onCellTap: (events, date) {
-          if (date.month == state.currentState!.currentDate.month) {
-            showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return ListRecordsScreen(
+          
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: MonthView<Incident>(
+              key: monthState,
+              controller: controller,
+              showBorder: false,
+              hideDaysNotInMonth: true,
+              cellAspectRatio: cellAspectRatio,
+              headerBuilder: (date) {
+                return HeaderCalendarWidget(
+                  state: monthState,
                   date: date,
-                  events: events,
                 );
               },
-            );
-          }
-        },
-        onPageChange: (date, direction) {
-          // Обновляем состояние при изменении месяца
-          setState(() {
-            _currentDate = date;
-          });
-        },
-      ),
+              weekDayBuilder: (day) {
+                return WeekdayCalendarWidget(
+                  day: day,
+                );
+              },
+              cellBuilder:
+                  (date, events, isToday, isInMonth, hideDaysNotInMonth) {
+                return CellCalendarWidget(
+                  date: date,
+                  events: events,
+                  isToday: isToday,
+                  isInMonth: isInMonth,
+                );
+              },
+              onCellTap: (events, date) {
+                if (date.month == monthState.currentState!.currentDate.month) {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return ListRecordsScreen(
+                        date: date,
+                        events: events,
+                      );
+                    },
+                  );
+                }
+              },
+              onPageChange: (date, direction) {
+                // setState(() {
+                //   _currentDate = date;
+                // });
+                // Обновляем состояние при изменении месяца
+                context.read<CalendarBloc>().add(
+                      GetMonthEvents(
+                        date: date,
+                      ),
+                    );
+              },
+            ),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 
