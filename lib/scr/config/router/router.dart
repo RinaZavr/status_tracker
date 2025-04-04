@@ -9,7 +9,7 @@ abstract class AppRouter {
   static final router = GoRouter(
     debugLogDiagnostics: kDebugMode,
     routes: $appRoutes,
-    initialLocation: CalendarRoute().location,
+    initialLocation: SplashRoute().location,
     errorBuilder: (context, state) {
       return const CalendarScreen();
     },

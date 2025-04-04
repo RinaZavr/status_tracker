@@ -12,6 +12,7 @@ import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
 import 'package:status_tracker/scr/config/styles/themes.dart';
 import 'package:status_tracker/scr/features/auth/bloc/auth_bloc.dart';
 import 'package:status_tracker/scr/features/calendar/bloc/calendar_bloc.dart';
+import 'package:status_tracker/scr/features/incidents/cubit/incidents_cubit.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -58,6 +59,9 @@ class _AppState extends State<App> {
         ),
         BlocProvider(
           create: (context) => CalendarBloc(),
+        ),
+        BlocProvider(
+          create: (context) => IncidentsCubit(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
