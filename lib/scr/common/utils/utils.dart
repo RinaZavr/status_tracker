@@ -9,7 +9,6 @@ import 'package:status_tracker/scr/common/consts/icons.dart';
 import 'package:status_tracker/scr/common/extensions/context_extensions.dart';
 import 'package:status_tracker/scr/config/styles/colors.dart';
 import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
-import 'package:status_tracker/scr/features/records/my/view/my_records_screen.dart';
 
 abstract class Utils {
   Utils._();
@@ -46,37 +45,37 @@ abstract class Utils {
     return {'color': statusColor, 'icon': statusIcon};
   }
 
-  static DateTimeRange updateSelectedRange(TimeFilter filter) {
+  static DateTimeRange updateSelectedRange(PeriodName filter) {
     final now = DateTime.now().withoutTime;
     var startDate = now;
     var endDate = now;
 
     switch (filter) {
-      case TimeFilter.day:
+      case PeriodName.day:
         startDate = DateTime(now.year, now.month, now.day);
         endDate = startDate
             .add(const Duration(days: 1))
             .subtract(const Duration(seconds: 1));
         break;
-      case TimeFilter.week:
+      case PeriodName.week:
         startDate = now.subtract(Duration(days: now.weekday - 1));
         endDate = startDate
             .add(const Duration(days: 7))
             .subtract(const Duration(seconds: 1));
         break;
-      case TimeFilter.month:
+      case PeriodName.month:
         startDate = DateTime(now.year, now.month, 1);
         endDate = DateTime(now.year, now.month + 1, 1)
             .subtract(const Duration(seconds: 1));
         break;
-      case TimeFilter.year:
+      case PeriodName.year:
         startDate = DateTime(now.year, 1, 1);
         endDate =
             DateTime(now.year + 1, 1, 1).subtract(const Duration(seconds: 1));
         break;
-      case TimeFilter.all:
+      case PeriodName.all:
         break;
-      case TimeFilter.period:
+      case PeriodName.period:
         break;
     }
     return DateTimeRange(
@@ -85,7 +84,7 @@ abstract class Utils {
     );
   }
 
-  static TimeFilter getFilterFromRange(DateTimeRange range) {
+  static PeriodName getFilterFromRange(DateTimeRange range) {
     final now = DateTime.now().withoutTime;
 
     // Проверяем, совпадает ли период с текущим днем
@@ -97,7 +96,7 @@ abstract class Utils {
           .withoutTime,
     );
     if (range.start == dayRange.start && range.end == dayRange.end) {
-      return TimeFilter.day;
+      return PeriodName.day;
     }
 
     // Проверяем, совпадает ли период с текущей неделей
@@ -110,7 +109,7 @@ abstract class Utils {
           .withoutTime,
     );
     if (range.start == weekRange.start && range.end == weekRange.end) {
-      return TimeFilter.week;
+      return PeriodName.week;
     }
 
     // Проверяем, совпадает ли период с текущим месяцем
@@ -121,7 +120,7 @@ abstract class Utils {
           .withoutTime,
     );
     if (range.start == monthRange.start && range.end == monthRange.end) {
-      return TimeFilter.month;
+      return PeriodName.month;
     }
 
     // Проверяем, совпадает ли период с текущим годом
@@ -132,12 +131,12 @@ abstract class Utils {
           .withoutTime,
     );
     if (range.start == yearRange.start && range.end == yearRange.end) {
-      return TimeFilter.year;
+      return PeriodName.year;
     }
 
     // Если период не совпадает ни с одним из фильтров,
     // возвращаем "Произвольный период"
-    return TimeFilter.period;
+    return PeriodName.period;
   }
 
   static String getBasicDateFormat({String? date, DateTime? dateTime}) {
@@ -150,22 +149,16 @@ abstract class Utils {
   }
 
   static int sortEventsAscending(
-    CalendarEventData<Incident> event1,
-    CalendarEventData<Incident> event2,
+    Incident event1,
+    Incident event2,
   ) {
     // Преобразуем строки дат в объекты DateTime для корректного сравнения
-    final dateA = event1.event?.date != null
-        ? DateTime.tryParse(event1.event!.date!)
-        : null;
-    final startDateA = event1.event?.startDate != null
-        ? DateTime.tryParse(event1.event!.startDate!)
-        : null;
-    final dateB = event2.event?.date != null
-        ? DateTime.tryParse(event2.event!.date!)
-        : null;
-    final startDateB = event2.event?.startDate != null
-        ? DateTime.tryParse(event2.event!.startDate!)
-        : null;
+    final dateA = event1.date != null ? DateTime.tryParse(event1.date!) : null;
+    final startDateA =
+        event1.startDate != null ? DateTime.tryParse(event1.startDate!) : null;
+    final dateB = event2.date != null ? DateTime.tryParse(event2.date!) : null;
+    final startDateB =
+        event2.startDate != null ? DateTime.tryParse(event2.startDate!) : null;
 
     // Если обе даты присутствуют у обоих событий, сравниваем их
     if (dateA != null && dateB != null) {
@@ -183,22 +176,16 @@ abstract class Utils {
   }
 
   static int sortEventsDescending(
-    CalendarEventData<Incident> event1,
-    CalendarEventData<Incident> event2,
+    Incident event1,
+    Incident event2,
   ) {
     // Преобразуем строки дат в объекты DateTime для корректного сравнения
-    final dateA = event1.event?.date != null
-        ? DateTime.tryParse(event1.event!.date!)
-        : null;
-    final startDateA = event1.event?.startDate != null
-        ? DateTime.tryParse(event1.event!.startDate!)
-        : null;
-    final dateB = event2.event?.date != null
-        ? DateTime.tryParse(event2.event!.date!)
-        : null;
-    final startDateB = event2.event?.startDate != null
-        ? DateTime.tryParse(event2.event!.startDate!)
-        : null;
+    final dateA = event1.date != null ? DateTime.tryParse(event1.date!) : null;
+    final startDateA =
+        event1.startDate != null ? DateTime.tryParse(event1.startDate!) : null;
+    final dateB = event2.date != null ? DateTime.tryParse(event2.date!) : null;
+    final startDateB =
+        event2.startDate != null ? DateTime.tryParse(event2.startDate!) : null;
 
     // Сравниваем даты по убыванию
     if (dateA != null && dateB != null) {
@@ -296,5 +283,14 @@ abstract class Utils {
         ),
       ),
     );
+  }
+}
+
+extension StringCasingExtension on String {
+  String capitalizeFirstLetter() {
+    if (this == null || isEmpty) {
+      return this;
+    }
+    return '${this[0].toUpperCase()}${substring(1)}';
   }
 }

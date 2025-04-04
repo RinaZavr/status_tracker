@@ -8,9 +8,10 @@ import 'package:status_tracker/scr/config/router/routes.dart';
 import 'package:status_tracker/scr/config/styles/colors.dart';
 import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
 import 'package:status_tracker/scr/features/auth/bloc/auth_bloc.dart';
+import 'package:status_tracker/scr/features/calendar/bloc/calendar_bloc.dart';
 import 'package:status_tracker/scr/features/calendar/view/widgets/calendar_widget.dart';
-import 'package:status_tracker/scr/features/records/create/view/create_record_screen.dart';
-import 'package:status_tracker/scr/features/records/my/view/my_records_screen.dart';
+import 'package:status_tracker/scr/features/incidents/create/view/create_record_screen.dart';
+import 'package:status_tracker/scr/features/incidents/my/view/my_records_screen.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -52,7 +53,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         builder: (context) {
                           return const MyRecordsScreen();
                         },
-                      );
+                      ).then((value) {
+                        if (value == true) {
+                          context
+                              .read<CalendarBloc>()
+                              .add(GetMonthEvents(date: DateTime.now()));
+                        }
+                      });
                     },
                   ),
                 );
@@ -108,44 +115,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
               return const SizedBox();
             },
           ),
-          // PopupMenuButton<String>(
-          //   position: PopupMenuPosition.under,
-          //   color: context.colorExt.backgroundColor,
-          //   onSelected: (value) {
-          //     context.read<AuthBloc>().add(AuthLogoutEvent());
-          //   },
-          //   itemBuilder: (context) => [
-          //     PopupMenuItem(
-          //       value: 'logout',
-          //       child: Center(
-          //         child: Text(
-          //           'Выйти',
-          //           style: context.textExt.normal.copyWith(color: Colors.red),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          //   child: context.read<AuthBloc>().isAuthorized()
-          //       ? SizedBox(
-          //           width: MediaQuery.of(context).size.width * 0.3,
-          //           child: Text(
-          //             '${DioClient().user!.name} ${DioClient().user!.surname}',
-          //             style: context.textExt.normal,
-          //             textAlign: TextAlign.center,
-          //             maxLines: 2,
-          //             overflow: TextOverflow.ellipsis,
-          //           ),
-          //         )
-          //       : CustomButton(
-          //           child: Text(
-          //             'Войти',
-          //             style: context.textExt.normal,
-          //           ),
-          //           onPressed: () {
-          //             AuthRoute().push(context);
-          //           },
-          //         ),
-          // ),
           const SizedBox(width: 16),
         ],
       ),
@@ -168,7 +137,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         builder: (context) {
                           return const CreateRecordScreen();
                         },
-                      );
+                      ).then((value) {
+                        if (value == true) {
+                          context
+                              .read<CalendarBloc>()
+                              .add(GetMonthEvents(date: DateTime.now()));
+                        }
+                      });
                     },
                     backgroundColor: context.colorExt.buttonColor,
                     isExpanded: true,

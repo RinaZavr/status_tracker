@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:api/api_client.dart';
+import 'package:api/src/secure_storage.dart';
 
 class IncidentsService {
   final DioClient _dioClient = DioClient();
@@ -29,30 +32,34 @@ class IncidentsService {
   Future<List<Incident>> getUserIncidents({
     required int? userId,
     required PeriodName period,
-    String? startDate,
-    String? endDate,
+    DateTime? startDate,
+    DateTime? endDate,
     required List<IncidentStatus> statuses,
   }) async {
     final data = <String, dynamic>{
-      'period': period.toJsonValue(),
+      'userId': userId,
+      'periodName': period.toJsonValue(),
+      'statuses': statuses.map((status) => status.toJsonValue()).toList(),
+      'startDate': startDate?.toUtc().toIso8601String(),
+      'endDate': endDate?.toUtc().toIso8601String(),
     };
 
-    if (userId != null) {
-      data['userId'] = userId;
-    }
+    // if (userId != null) {
+    //   data['userId'] = userId;
+    // }
 
-    if (startDate != null) {
-      data['startDate'] = startDate;
-    }
+    // if (startDate != null) {
+    //   data['startDate'] = startDate;
+    // }
 
-    if (endDate != null) {
-      data['endDate'] = endDate;
-    }
+    // if (endDate != null) {
+    //   data['endDate'] = endDate;
+    // }
 
-    if (statuses.isNotEmpty) {
-      data['statuses'] =
-          statuses.map((status) => status.toJsonValue()).toList();
-    }
+    // if (statuses.isNotEmpty) {
+    //   data['statuses'] =
+    //       statuses.map((status) => status.toJsonValue()).toList();
+    // }
 
     final response = await _dioClient.dio.post(
       '/incidents/get',
@@ -91,7 +98,10 @@ class IncidentsService {
   Future<Map<String, dynamic>> updateIncident({
     required Incident incident,
   }) async {
-    final response = await _dioClient.dio.post(
+    log((await SecureStorage.getToken()).toString());
+    log(incident.toJson().toString());
+
+    final response = await _dioClient.dio.put(
       '/incidents/update',
       data: incident.toJson(),
     );
@@ -120,7 +130,7 @@ class IncidentsService {
 
     if (response.statusCode == 200) {
       result['massage'] = response.data['message'];
-      result['incident'] = Incident.fromJson(response.data['incident']);
+      result['id'] = response.data['id'];
     }
 
     return result;

@@ -54,7 +54,14 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                 ]
           : [],
       onValueChanged: (value) {
-        if (value.length > 1) {
+        if (widget.isSingle == true) {
+          widget.onChangedRange(
+            DateTimeRange(
+              start: value.first,
+              end: value.first,
+            ),
+          );
+        } else if (value.length > 1) {
           widget.onChangedRange(
             DateTimeRange(
               start: value.first,
