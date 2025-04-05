@@ -8,3 +8,5 @@ export 'src/dio_client.dart';
 
 export 'src/incidents/models/incident_model.dart';
 export 'src/incidents/services/incidents_service.dart';
+
+export 'src/stream_messages_handler.dart';

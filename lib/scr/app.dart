@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:status_tracker/main.dart';
+import 'package:status_tracker/scr/common/utils/error_listener_screen.dart';
 import 'package:status_tracker/scr/config/router/router.dart';
 import 'package:status_tracker/scr/config/styles/cubit/theme_cubit.dart';
 import 'package:status_tracker/scr/config/styles/themes.dart';
@@ -71,6 +72,9 @@ class _AppState extends State<App> {
             child: MaterialApp.router(
               scaffoldMessengerKey: scaffoldMessengerKey,
               debugShowCheckedModeBanner: false,
+              builder: (context, child) {
+                return ErrorListener(child: child!);
+              },
               theme: state.isDark
                   ? AppThemes.dark(context)
                   : AppThemes.light(context),

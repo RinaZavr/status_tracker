@@ -20,6 +20,10 @@ class AuthService {
       await SecureStorage.saveToken(response.data['token']);
       _dioClient.user = User.fromJson(response.data);
 
+      MessageHandler().addError(
+        MessageData(title: 'Вход', message: 'Вход выполнен успешно'),
+      );
+
       return User.fromJson(response.data);
     }
 
@@ -49,6 +53,13 @@ class AuthService {
     if (response.statusCode == 201) {
       await SecureStorage.saveToken(response.data['token']);
       _dioClient.user = User.fromJson(response.data);
+
+      MessageHandler().addError(
+        MessageData(
+          title: 'Регистрация',
+          message: 'Регистрация выполнена успешно',
+        ),
+      );
 
       return User.fromJson(response.data);
     }

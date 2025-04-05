@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:api/api_client.dart';
-import 'package:api/src/secure_storage.dart';
 
 class IncidentsService {
   final DioClient _dioClient = DioClient();
@@ -44,23 +41,6 @@ class IncidentsService {
       'endDate': endDate?.toUtc().toIso8601String(),
     };
 
-    // if (userId != null) {
-    //   data['userId'] = userId;
-    // }
-
-    // if (startDate != null) {
-    //   data['startDate'] = startDate;
-    // }
-
-    // if (endDate != null) {
-    //   data['endDate'] = endDate;
-    // }
-
-    // if (statuses.isNotEmpty) {
-    //   data['statuses'] =
-    //       statuses.map((status) => status.toJsonValue()).toList();
-    // }
-
     final response = await _dioClient.dio.post(
       '/incidents/get',
       data: data,
@@ -77,7 +57,7 @@ class IncidentsService {
     return incidents;
   }
 
-  Future<Map<String, dynamic>> createIncident({
+  Future<Incident?> createIncident({
     required Incident incident,
   }) async {
     final response = await _dioClient.dio.post(
@@ -85,38 +65,29 @@ class IncidentsService {
       data: incident.toJson(),
     );
 
-    final result = <String, dynamic>{};
-
     if (response.statusCode == 200) {
-      result['massage'] = response.data['message'];
-      result['incident'] = Incident.fromJson(response.data['incident']);
+      return Incident.fromJson(response.data['incident']);
     }
 
-    return result;
+    return null;
   }
 
-  Future<Map<String, dynamic>> updateIncident({
+  Future<Incident?> updateIncident({
     required Incident incident,
   }) async {
-    log((await SecureStorage.getToken()).toString());
-    log(incident.toJson().toString());
-
     final response = await _dioClient.dio.put(
       '/incidents/update',
       data: incident.toJson(),
     );
 
-    final result = <String, dynamic>{};
-
     if (response.statusCode == 200) {
-      result['massage'] = response.data['message'];
-      result['incident'] = Incident.fromJson(response.data['incident']);
+      return Incident.fromJson(response.data['incident']);
     }
 
-    return result;
+    return null;
   }
 
-  Future<Map<String, dynamic>> deleteIncident({
+  Future<String?> deleteIncident({
     required int incidentId,
   }) async {
     final response = await _dioClient.dio.delete(
@@ -126,13 +97,10 @@ class IncidentsService {
       },
     );
 
-    final result = <String, dynamic>{};
-
     if (response.statusCode == 200) {
-      result['massage'] = response.data['message'];
-      result['id'] = response.data['id'];
+      return response.data['id'];
     }
 
-    return result;
+    return null;
   }
 }
